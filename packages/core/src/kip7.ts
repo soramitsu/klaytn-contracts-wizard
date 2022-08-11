@@ -67,6 +67,7 @@ export function buildKIP7(opts: KIP7Options): Contract {
 
   const { access, info } = allOpts;
 
+  addSupportsInterface(c);
   addBase(c, allOpts.name, allOpts.symbol);
 
   if (allOpts.burnable) {
@@ -128,6 +129,19 @@ function addBurnable(c: ContractBuilder) {
     name: 'KIP7Burnable',
     path: '@klaytn/contracts/KIP/token/KIP7/extensions/KIP7Burnable.sol',
   });
+}
+
+function addSupportsInterface(c: ContractBuilder) {
+  c.addModifier('view', functions.supportsInterface)
+  c.addModifier('virtual', functions.supportsInterface)
+  c.addOverride('KIP7', functions.supportsInterface)
+  c.addOverride('AccessControl', functions.supportsInterface)
+  c.addOverride('KIP7Burnable', functions.supportsInterface)
+  const snapshotCode = `return
+            interfaceId == type(IKIP7Permit).interfaceId ||
+            interfaceId == type(IVotes).interfaceId ||
+            super.supportsInterface(interfaceId);`
+  c.addFunctionCode(snapshotCode, functions.supportsInterface);
 }
 
 function addSnapshot(c: ContractBuilder, access: Access) {
@@ -195,6 +209,14 @@ function addFlashMint(c: ContractBuilder) {
 }
 
 const functions = defineFunctions({
+  supportsInterface: {
+    kind: 'public' as const,
+    returns: ['bool'],
+    args: [
+      { name: 'interfaceId', type: 'bytes4' },
+    ],
+  },
+
   _beforeTokenTransfer: {
     kind: 'internal' as const,
     args: [

@@ -190,7 +190,7 @@ function printFunction(fn: ContractFunction, helpers: Helpers): Lines[] {
 
   const code = [...fn.code];
 
-  if (fn.override.size > 0 && !fn.final) {
+  if (fn.code.length === 0 && fn.override.size > 0 && !fn.final) {
     const superCall = `super.${fn.name}(${fn.args.map(a => a.name).join(', ')});`;
     code.push(fn.returns?.length ? 'return ' + superCall : superCall);
   }
