@@ -1,6 +1,7 @@
 import type { KIP7Options } from '../kip7';
 import { accessOptions } from '../set-access-control';
 import { infoOptions } from '../set-info';
+import { upgradeableOptions } from '../set-upgradeable';
 import { generateAlternatives } from './alternatives';
 
 const booleans = [true, false];

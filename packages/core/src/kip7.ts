@@ -7,7 +7,7 @@ import { setInfo } from './set-info';
 import type { Info } from "./set-info";
 import { printContract } from './print';
 
-export interface KIP7Options extends CommonOptions {
+export interface KIP7Options {
   access?: Access;
   info?: Info;
   name: string;
@@ -34,8 +34,7 @@ export const defaults: Required<KIP7Options> = {
   votes: false,
   flashmint: false,
   access: commonDefaults.access,
-  info: commonDefaults.info,
-  upgradeable: false
+  info: commonDefaults.info
 } as const;
 
 function withDefaults(opts: KIP7Options): Required<KIP7Options> {

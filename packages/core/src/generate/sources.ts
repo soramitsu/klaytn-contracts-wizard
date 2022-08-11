@@ -3,8 +3,9 @@ import path from 'path';
 import crypto from 'crypto';
 
 import { generateERC20Options } from './erc20';
-import { generateKIP7Options } from './kip7';
+import { generateERC721Options } from './erc721';
 import { generateERC1155Options } from './erc1155';
+import { generateKIP7Options } from './kip7';
 import { generateGovernorOptions } from './governor';
 import { generateCustomOptions } from './custom';
 import { buildGeneric, GenericOptions } from '../build-generic';
@@ -20,12 +21,16 @@ export function* generateOptions(): Generator<GenericOptions> {
     yield { kind: 'ERC20', ...kindOpts };
   }
 
-  for (const kindOpts of generateKIP7Options()) {
-    yield { kind: 'KIP7', ...kindOpts };
+  for (const kindOpts of generateERC721Options()) {
+    yield { kind: 'ERC721', ...kindOpts };
   }
 
   for (const kindOpts of generateERC1155Options()) {
     yield { kind: 'ERC1155', ...kindOpts };
+  }
+
+  for (const kindOpts of generateKIP7Options()) {
+    yield { kind: 'KIP7', ...kindOpts };
   }
 
   for (const kindOpts of generateGovernorOptions()) {
@@ -74,8 +79,8 @@ function generateContractSubset(subset: Subset): GeneratedContract[] {
   } else {
     const getParents = (c: GeneratedContract) => c.contract.parents.map(p => p.contract.path);
     return [
-      ...findCover(contracts.filter(c => c.options.upgradeable), getParents),
-      ...findCover(contracts.filter(c => !c.options.upgradeable), getParents),
+      // ...findCover(contracts.filter(c => c.options.upgradeable), getParents),
+      // ...findCover(contracts.filter(c => !c.options.upgradeable), getParents),
     ];
   }
 }
