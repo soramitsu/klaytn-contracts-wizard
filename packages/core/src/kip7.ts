@@ -2,12 +2,12 @@ import { Contract, ContractBuilder } from './contract';
 import { Access, setAccessControl, requireAccessControl } from './set-access-control';
 import { addPausable } from './add-pausable';
 import { defineFunctions } from './utils/define-functions';
-import { withCommonDefaults, defaults as commonDefaults } from './common-options';
+import { CommonOptions, withCommonDefaults, defaults as commonDefaults } from './common-options';
 import { setInfo } from './set-info';
 import type { Info } from "./set-info";
 import { printContract } from './print';
 
-export interface KIP7Options {
+export interface KIP7Options extends CommonOptions {
   access?: Access;
   info?: Info;
   name: string;
@@ -35,6 +35,7 @@ export const defaults: Required<KIP7Options> = {
   flashmint: false,
   access: commonDefaults.access,
   info: commonDefaults.info,
+  upgradeable: false
 } as const;
 
 function withDefaults(opts: KIP7Options): Required<KIP7Options> {
