@@ -66,20 +66,20 @@ testGovernor('governor with erc20votes', {
   votes: 'erc20votes',
 });
 
-testGovernor('governor with erc721votes', {
-  votes: 'erc721votes',
+testGovernor('governor with kip7votes', {
+  votes: 'kip7votes',
 });
 
-testGovernor('governor with erc721votes omit decimals', {
-  votes: 'erc721votes',
+testGovernor('governor with kip7votes omit decimals', {
+  votes: 'kip7votes',
   decimals: 6,
   proposalThreshold: '1',
   quorumMode: 'absolute',
   quorumAbsolute: '5',
 });
 
-testGovernor('governor with erc721votes settings omit decimals', {
-  votes: 'erc721votes',
+testGovernor('governor with kip7votes settings omit decimals', {
+  votes: 'kip7votes',
   decimals: 6,
   proposalThreshold: '10',
   settings: true,

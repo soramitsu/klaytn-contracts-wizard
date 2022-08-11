@@ -53,10 +53,10 @@ export function requireAccessControl(c: ContractBuilder, fn: BaseFunction, acces
 const parents = {
   Ownable: {
     name: 'Ownable',
-    path: '@openzeppelin/contracts/access/Ownable.sol',
+    path: '@klaytn/contracts/access/Ownable.sol',
   },
   AccessControl: {
     name: 'AccessControl',
-    path: '@openzeppelin/contracts/access/AccessControl.sol',
+    path: '@klaytn/contracts/access/AccessControl.sol',
   },
 };

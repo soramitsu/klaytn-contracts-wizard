@@ -2,12 +2,14 @@ import { Contract, ContractBuilder } from './contract';
 import { Access, setAccessControl, requireAccessControl } from './set-access-control';
 import { addPausable } from './add-pausable';
 import { defineFunctions } from './utils/define-functions';
-import { CommonOptions, withCommonDefaults, defaults as commonDefaults } from './common-options';
-import { setUpgradeable } from './set-upgradeable';
+import { withCommonDefaults, defaults as commonDefaults } from './common-options';
 import { setInfo } from './set-info';
+import type { Info } from "./set-info";
 import { printContract } from './print';
 
-export interface ERC20Options extends CommonOptions {
+export interface KIP7Options {
+  access?: Access;
+  info?: Info;
   name: string;
   symbol: string;
   burnable?: boolean;
@@ -20,7 +22,7 @@ export interface ERC20Options extends CommonOptions {
   flashmint?: boolean;
 }
 
-export const defaults: Required<ERC20Options> = {
+export const defaults: Required<KIP7Options> = {
   name: 'MyToken',
   symbol: 'MTK',
   burnable: false,
@@ -32,11 +34,10 @@ export const defaults: Required<ERC20Options> = {
   votes: false,
   flashmint: false,
   access: commonDefaults.access,
-  upgradeable: commonDefaults.upgradeable,
   info: commonDefaults.info,
 } as const;
 
-function withDefaults(opts: ERC20Options): Required<ERC20Options> {
+function withDefaults(opts: KIP7Options): Required<KIP7Options> {
   return {
     ...opts,
     ...withCommonDefaults(opts),
@@ -51,20 +52,20 @@ function withDefaults(opts: ERC20Options): Required<ERC20Options> {
   };
 }
 
-export function printERC20(opts: ERC20Options = defaults): string {
-  return printContract(buildERC20(opts));
+export function printKIP7(opts: KIP7Options = defaults): string {
+  return printContract(buildKIP7(opts));
 }
 
-export function isAccessControlRequired(opts: Partial<ERC20Options>): boolean {
-  return opts.mintable || opts.pausable || opts.snapshots || opts.upgradeable === 'uups';
+export function isAccessControlRequired(opts: Partial<KIP7Options>): boolean {
+  return !!(opts.mintable || opts.pausable || opts.snapshots);
 }
 
-export function buildERC20(opts: ERC20Options): Contract {
+export function buildKIP7(opts: KIP7Options): Contract {
   const allOpts = withDefaults(opts);
 
   const c = new ContractBuilder(allOpts.name);
 
-  const { access, upgradeable, info } = allOpts;
+  const { access, info } = allOpts;
 
   addBase(c, allOpts.name, allOpts.symbol);
 
@@ -102,7 +103,6 @@ export function buildERC20(opts: ERC20Options): Contract {
   }
 
   setAccessControl(c, access);
-  setUpgradeable(c, upgradeable, access);
   setInfo(c, info);
 
   return c;
@@ -111,32 +111,32 @@ export function buildERC20(opts: ERC20Options): Contract {
 function addBase(c: ContractBuilder, name: string, symbol: string) {
   c.addParent(
     {
-      name: 'ERC20',
-      path: '@klaytn/contracts/token/ERC20/ERC20.sol',
+      name: 'KIP7',
+      path: '@klaytn/contracts/KIP/KIP7/KIP7.sol',
     },
     [name, symbol],
   );
 
-  c.addOverride('ERC20', functions._beforeTokenTransfer);
-  c.addOverride('ERC20', functions._afterTokenTransfer);
-  c.addOverride('ERC20', functions._mint);
-  c.addOverride('ERC20', functions._burn);
+  c.addOverride('KIP7', functions._beforeTokenTransfer);
+  c.addOverride('KIP7', functions._afterTokenTransfer);
+  c.addOverride('KIP7', functions._mint);
+  c.addOverride('KIP7', functions._burn);
 }
 
 function addBurnable(c: ContractBuilder) {
   c.addParent({
-    name: 'ERC20Burnable',
-    path: '@klaytn/contracts/token/ERC20/extensions/ERC20Burnable.sol',
+    name: 'KIP7Burnable',
+    path: '@klaytn/contracts/KIP/KIP7/extensions/KIP7Burnable.sol',
   });
 }
 
 function addSnapshot(c: ContractBuilder, access: Access) {
   c.addParent({
-    name: 'ERC20Snapshot',
-    path: '@klaytn/contracts/token/ERC20/extensions/ERC20Snapshot.sol',
+    name: 'KIP7Snapshot',
+    path: '@klaytn/contracts/KIP/KIP7/extensions/KIP7Snapshot.sol',
   });
 
-  c.addOverride('ERC20Snapshot', functions._beforeTokenTransfer);
+  c.addOverride('KIP7Snapshot', functions._beforeTokenTransfer);
 
   requireAccessControl(c, functions.snapshot, access, 'SNAPSHOT');
   c.addFunctionCode('_snapshot();', functions.snapshot);
@@ -168,29 +168,29 @@ function addMintable(c: ContractBuilder, access: Access) {
 
 function addPermit(c: ContractBuilder, name: string) {
   c.addParent({
-    name: 'ERC20Permit',
-    path: '@klaytn/contracts/token/ERC20/extensions/draft-ERC20Permit.sol',
+    name: 'KIP7Permit',
+    path: '@klaytn/contracts/KIP/KIP7/extensions/draft-KIP7Permit.sol',
   }, [name]);
 }
 
 function addVotes(c: ContractBuilder) {
-  if (!c.parents.some(p => p.contract.name === 'ERC20Permit')) {
-    throw new Error('Missing ERC20Permit requirement for ERC20Votes');
+  if (!c.parents.some(p => p.contract.name === 'KIP7Permit')) {
+    throw new Error('Missing KIP7Permit requirement for KIP7Votes');
   }
 
   c.addParent({
-    name: 'ERC20Votes',
-    path: '@klaytn/contracts/token/ERC20/extensions/ERC20Votes.sol',
+    name: 'KIP7Votes',
+    path: '@klaytn/contracts/KIP/KIP7/extensions/KIP7Votes.sol',
   });
-  c.addOverride('ERC20Votes', functions._mint);
-  c.addOverride('ERC20Votes', functions._burn);
-  c.addOverride('ERC20Votes', functions._afterTokenTransfer);
+  c.addOverride('KIP7Votes', functions._mint);
+  c.addOverride('KIP7Votes', functions._burn);
+  c.addOverride('KIP7Votes', functions._afterTokenTransfer);
 }
 
 function addFlashMint(c: ContractBuilder) {
   c.addParent({
-    name: 'ERC20FlashMint',
-    path: '@klaytn/contracts/token/ERC20/extensions/ERC20FlashMint.sol',
+    name: 'KIP7FlashMint',
+    path: '@klaytn/contracts/KIP/KIP7/extensions/KIP7FlashMint.sol',
   });
 }
 

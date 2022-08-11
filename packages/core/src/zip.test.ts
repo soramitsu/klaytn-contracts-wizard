@@ -12,16 +12,16 @@ test('erc20 basic', t => {
 
   t.deepEqual(files, [
     '@openzeppelin/',
-    '@openzeppelin/contracts/',
-    '@openzeppelin/contracts/README.md',
-    '@openzeppelin/contracts/token/',
-    '@openzeppelin/contracts/token/ERC20/',
-    '@openzeppelin/contracts/token/ERC20/ERC20.sol',
-    '@openzeppelin/contracts/token/ERC20/IERC20.sol',
-    '@openzeppelin/contracts/token/ERC20/extensions/',
-    '@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol',
-    '@openzeppelin/contracts/utils/',
-    '@openzeppelin/contracts/utils/Context.sol',
+    '@klaytn/contracts/',
+    '@klaytn/contracts/README.md',
+    '@klaytn/contracts/token/',
+    '@klaytn/contracts/token/ERC20/',
+    '@klaytn/contracts/token/ERC20/ERC20.sol',
+    '@klaytn/contracts/token/ERC20/IERC20.sol',
+    '@klaytn/contracts/token/ERC20/extensions/',
+    '@klaytn/contracts/token/ERC20/extensions/IERC20Metadata.sol',
+    '@klaytn/contracts/utils/',
+    '@klaytn/contracts/utils/Context.sol',
     'MyToken.sol',
   ]);
 });

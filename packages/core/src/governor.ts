@@ -30,7 +30,7 @@ export const defaults: Required<GovernorOptions> = {
   info: commonDefaults.info
 } as const;
 
-export const votesOptions = ['erc20votes', 'erc721votes', 'comp'] as const;
+export const votesOptions = ['erc20votes', 'kip7votes', 'comp'] as const;
 export type VotesOptions = typeof votesOptions[number];
 
 export const timelockOptions = [false, 'openzeppelin', 'compound'] as const;
@@ -103,7 +103,7 @@ function addBase(c: ContractBuilder, { name }: GovernorOptions) {
   c.addParent(
     {
       name: 'Governor',
-      path: '@openzeppelin/contracts/governance/Governor.sol',
+      path: '@klaytn/contracts/governance/Governor.sol',
     },
     [name],
   );
@@ -124,7 +124,7 @@ function addSettings(c: ContractBuilder, allOpts: Required<GovernorOptions>) {
     c.addParent(
       {
         name: 'GovernorSettings',
-        path: '@openzeppelin/contracts/governance/extensions/GovernorSettings.sol',
+        path: '@klaytn/contracts/governance/extensions/GovernorSettings.sol',
       },
       [
         { value: getVotingDelay(allOpts), note: allOpts.delay },
@@ -184,7 +184,7 @@ function getProposalThreshold({ proposalThreshold, decimals, votes }: Required<G
     });
   }
 
-  if (/^0+$/.test(proposalThreshold) || decimals === 0 || votes === 'erc721votes') {
+  if (/^0+$/.test(proposalThreshold) || decimals === 0 || votes === 'kip7votes') {
     return proposalThreshold;
   } else {
     return `${proposalThreshold}e${decimals}`;
@@ -212,7 +212,7 @@ function addCounting(c: ContractBuilder, { bravo }: GovernorOptions) {
   if (!bravo) {
     c.addParent({
       name: 'GovernorCountingSimple',
-      path: '@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol',
+      path: '@klaytn/contracts/governance/extensions/GovernorCountingSimple.sol',
     });
   }
 }
@@ -222,7 +222,7 @@ const votesModules = {
     tokenType: 'IVotes',
     parentName: 'GovernorVotes',
   },
-  erc721votes: {
+  kip7votes: {
     tokenType: 'IVotes',
     parentName: 'GovernorVotes',
   },
@@ -243,7 +243,7 @@ function addVotes(c: ContractBuilder, { votes }: Required<GovernorOptions>) {
 
   c.addParent({
     name: parentName,
-    path: `@openzeppelin/contracts/governance/extensions/${parentName}.sol`,
+    path: `@klaytn/contracts/governance/extensions/${parentName}.sol`,
   }, [{ lit: tokenArg }]);
 }
 
@@ -251,9 +251,9 @@ export const numberPattern = /^(?!$)(\d*)(?:\.(\d+))?(?:e(\d+))?$/;
 
 function addQuorum(c: ContractBuilder, opts: Required<GovernorOptions>) {
   if (opts.quorumMode === 'percent') {
-    if (opts.votes !== 'erc20votes' && opts.votes !== 'erc721votes') {
+    if (opts.votes !== 'erc20votes' && opts.votes !== 'kip7votes') {
       throw new OptionsError({
-        quorumPercent: 'Percent-based quorum is only available for ERC20Votes or ERC721Votes',
+        quorumPercent: 'Percent-based quorum is only available for ERC20Votes or KIP7Votes',
       });
     }
 
@@ -274,7 +274,7 @@ function addQuorum(c: ContractBuilder, opts: Required<GovernorOptions>) {
 
     c.addParent({
       name: 'GovernorVotesQuorumFraction',
-      path: '@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol',
+      path: '@klaytn/contracts/governance/extensions/GovernorVotesQuorumFraction.sol',
     }, [quorumFractionNumerator]);
     c.addOverride('GovernorVotesQuorumFraction', functions.quorum);
   }
@@ -286,7 +286,7 @@ function addQuorum(c: ContractBuilder, opts: Required<GovernorOptions>) {
       });
     }
 
-    let returnStatement = (opts.decimals === 0 || opts.votes === 'erc721votes') ? 
+    let returnStatement = (opts.decimals === 0 || opts.votes === 'kip7votes') ? 
       `return ${opts.quorumAbsolute};` :
       `return ${opts.quorumAbsolute}e${opts.decimals};`;
 
@@ -342,7 +342,7 @@ function addTimelock(c: ContractBuilder, { timelock }: Required<GovernorOptions>
 
   c.addParent({
     name: parentName,
-    path: `@openzeppelin/contracts/governance/extensions/${parentName}.sol`,
+    path: `@klaytn/contracts/governance/extensions/${parentName}.sol`,
   }, [{ lit: timelockArg }]);
   c.addOverride('IGovernor', functions.propose);
   c.addOverride(parentName, functions._execute);
@@ -362,7 +362,7 @@ function addBravo(c: ContractBuilder, { bravo, timelock }: GovernorOptions) {
 
     c.addParent({
       name: 'GovernorCompatibilityBravo',
-      path: '@openzeppelin/contracts/governance/compatibility/GovernorCompatibilityBravo.sol',
+      path: '@klaytn/contracts/governance/compatibility/GovernorCompatibilityBravo.sol',
     });
     c.addOverride('IGovernor', functions.state);
     c.addOverride('GovernorCompatibilityBravo', functions.propose);

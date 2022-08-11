@@ -6,6 +6,7 @@
     import ERC20Controls from './ERC20Controls.svelte';
     import ERC721Controls from './ERC721Controls.svelte';
     import ERC1155Controls from './ERC1155Controls.svelte';
+    import KIP7Controls from './KIP7Controls.svelte';
     import GovernorControls from './GovernorControls.svelte';
     import CustomControls from './CustomControls.svelte';
     import CopyIcon from './icons/CopyIcon.svelte';
@@ -104,6 +105,9 @@
   <div class="header flex flex-row justify-between">
     <div class="tab overflow-hidden">
       <OverflowMenu>
+        <button class:selected={tab === 'KIP7'} on:click={() => tab = 'KIP7'}>
+          KIP7
+        </button>
         <button class:selected={tab === 'ERC20'} on:click={() => tab = 'ERC20'}>
           ERC20
         </button>
@@ -191,6 +195,9 @@
       </div>
       <div class:hidden={tab !== 'ERC1155'}>
         <ERC1155Controls bind:opts={allOpts.ERC1155} />
+      </div>
+      <div class:hidden={tab !== 'KIP7'}>
+        <KIP7Controls bind:opts={allOpts.KIP7} />
       </div>
       <div class:hidden={tab !== 'Governor'}>
         <GovernorControls bind:opts={allOpts.Governor} errors={errors.Governor} />

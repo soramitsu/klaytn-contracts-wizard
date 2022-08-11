@@ -78,6 +78,6 @@
 
 <AccessControlSection bind:access={opts.access} required={requireAccessControl} />
 
-<UpgradeabilitySection bind:upgradeable={opts.upgradeable} />
+<!-- <UpgradeabilitySection bind:upgradeable={opts.upgradeable} /> -->
 
 <InfoSection bind:info={opts.info} />

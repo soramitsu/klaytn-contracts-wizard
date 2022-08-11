@@ -38,21 +38,21 @@
 
   export let errors: undefined | OptionsErrorMessages;
 
-  let wasERC721Votes = opts.votes === 'erc721votes';
+  let wasKIP7Votes = opts.votes === 'kip7votes';
   let previousDecimals = opts.decimals;
   let disabledDecimals: boolean;
 
   $: {
-    if (wasERC721Votes && opts.votes !== 'erc721votes') {
+    if (wasKIP7Votes && opts.votes !== 'kip7votes') {
       opts.decimals = previousDecimals;
       disabledDecimals = false;
-    } else if (!wasERC721Votes && opts.votes === 'erc721votes') {
+    } else if (!wasKIP7Votes && opts.votes === 'kip7votes') {
       previousDecimals = opts.decimals;
       opts.decimals = 0;     
       disabledDecimals = true;
     }
 
-    wasERC721Votes = opts.votes === 'erc721votes';
+    wasKIP7Votes = opts.votes === 'kip7votes';
   }
 
 </script>
@@ -125,7 +125,7 @@
       Token decimals:
       <input disabled={disabledDecimals} type="number" bind:value={opts.decimals} placeholder={defaults.decimals.toString()} class="input-inline" use:resizeToFit use:error={errors?.decimals}>
     </label>
-    <HelpTooltip>Token amounts above will be extended with this number of zeroes. Does not apply to ERC721Votes.</HelpTooltip>
+    <HelpTooltip>Token amounts above will be extended with this number of zeroes. Does not apply to KIP7Votes.</HelpTooltip>
   </p>
 
   <div class="checkbox-group">
@@ -161,11 +161,11 @@
       </HelpTooltip>
     </label>
 
-    <label class:checked={opts.votes === 'erc721votes'}>
-      <input type="radio" bind:group={opts.votes} value="erc721votes">
-      ERC721Votes
-      <HelpTooltip link="https://docs.openzeppelin.com/contracts/4.x/api/token/erc721#ERC721Votes">
-        Represent voting power with a votes-enabled ERC721 token. Voters can entrust their voting power to a delegate.
+    <label class:checked={opts.votes === 'kip7votes'}>
+      <input type="radio" bind:group={opts.votes} value="kip7votes">
+      KIP7Votes
+      <HelpTooltip link="https://docs.openzeppelin.com/contracts/4.x/api/token/kip7#KIP7Votes">
+        Represent voting power with a votes-enabled KIP7 token. Voters can entrust their voting power to a delegate.
       </HelpTooltip>
     </label>
 

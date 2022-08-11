@@ -2,20 +2,20 @@
   import HelpTooltip from './HelpTooltip.svelte';
 
   import type { KindedOptions } from '@openzeppelin/wizard';
-  import { erc20, premintPattern, infoDefaults } from '@openzeppelin/wizard';
+  import { kip7, premintPattern, infoDefaults } from '@openzeppelin/wizard';
 
   import AccessControlSection from './AccessControlSection.svelte';
   import UpgradeabilitySection from './UpgradeabilitySection.svelte';
   import InfoSection from './InfoSection.svelte';
 
-  export const opts: Required<KindedOptions['ERC20']> = {
-    kind: 'ERC20',
-    ...erc20.defaults,
+  export const opts: Required<KindedOptions['KIP7']> = {
+    kind: 'KIP7',
+    ...kip7.defaults,
     premint: '', // default to empty premint in UI instead of 0
     info: { ...infoDefaults }, // create new object since Info is nested
   };
 
-  $: requireAccessControl = erc20.isAccessControlRequired(opts);
+  $: requireAccessControl = kip7.isAccessControlRequired(opts);
 </script>
 
 <section class="controls-section">
@@ -57,7 +57,7 @@
     <label class:checked={opts.burnable}>
       <input type="checkbox" bind:checked={opts.burnable}>
       Burnable
-      <HelpTooltip link="https://docs.openzeppelin.com/contracts/4.x/api/token/erc20#ERC20Burnable">
+      <HelpTooltip link="https://docs.openzeppelin.com/contracts/4.x/api/token/kip7#KIP7Burnable">
         Token holders will be able to destroy their tokens.
       </HelpTooltip>
     </label>
@@ -74,7 +74,7 @@
     <label class:checked={opts.permit || opts.votes}>
       <input type="checkbox" bind:checked={opts.permit}>
       Permit
-      <HelpTooltip link="https://docs.openzeppelin.com/contracts/4.x/api/token/erc20#ERC20Permit">
+      <HelpTooltip link="https://docs.openzeppelin.com/contracts/4.x/api/token/kip7#KIP7Permit">
         Without paying gas, token holders will be able to allow third parties to transfer from their account.
         <br>
         <a href="https://eips.ethereum.org/EIPS/eip-2612">EIP</a> is still Draft and may change.
@@ -84,7 +84,7 @@
     <label class:checked={opts.votes}>
       <input type="checkbox" bind:checked={opts.votes}>
       Votes
-      <HelpTooltip link="https://docs.openzeppelin.com/contracts/4.x/api/token/erc20#ERC20Votes">
+      <HelpTooltip link="https://docs.openzeppelin.com/contracts/4.x/api/token/kip7#KIP7Votes">
         Keeps track of historical balances for voting in on-chain governance, with a way to delegate one's voting power to a trusted account.
       </HelpTooltip>
     </label>
@@ -92,7 +92,7 @@
     <label class:checked={opts.flashmint}>
       <input type="checkbox" bind:checked={opts.flashmint}>
       Flash Minting
-      <HelpTooltip link="https://docs.openzeppelin.com/contracts/4.x/api/token/erc20#ERC20FlashMint">
+      <HelpTooltip link="https://docs.openzeppelin.com/contracts/4.x/api/token/kip7#KIP7FlashMint">
         Built-in flash loans. Lend tokens without requiring collateral as long as they're returned in the same transaction.
       </HelpTooltip>
     </label>
@@ -100,7 +100,7 @@
     <label class:checked={opts.snapshots}>
       <input type="checkbox" bind:checked={opts.snapshots}>
       Snapshots
-      <HelpTooltip link="https://docs.openzeppelin.com/contracts/4.x/api/token/erc20#ERC20Snapshot">
+      <HelpTooltip link="https://docs.openzeppelin.com/contracts/4.x/api/token/kip7#KIP7Snapshot">
         Privileged accounts will be able to store snapshots of balances that can be retrieved later.
         <br>
         For on-chain voting, the Votes option is preferable.
@@ -110,7 +110,5 @@
 </section>
 
 <AccessControlSection bind:access={opts.access} required={requireAccessControl} />
-
-<!-- <UpgradeabilitySection bind:upgradeable={opts.upgradeable} /> -->
 
 <InfoSection bind:info={opts.info} />

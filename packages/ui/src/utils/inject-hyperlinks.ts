@@ -1,4 +1,4 @@
-import { version as contractsVersion } from "@openzeppelin/contracts/package.json";
+import { version as contractsVersion } from "@klaytn/contracts/package.json";
 
 export function injectHyperlinks(code: string) {
   const importRegex = /(@openzeppelin\/)(contracts-upgradeable\/|contracts\/)(.*)(&quot;)/g // we are modifying HTML, so use HTML escaped chars

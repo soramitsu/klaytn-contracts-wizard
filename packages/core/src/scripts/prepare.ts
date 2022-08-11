@@ -6,7 +6,7 @@ import type { SourceUnit } from 'solidity-ast';
 import { findAll } from 'solidity-ast/utils';
 import _rimraf from 'rimraf';
 import { promisify } from 'util';
-import { version } from "@openzeppelin/contracts/package.json";
+import { version } from "@klaytn/contracts/package.json";
 
 const rimraf = promisify(_rimraf);
 
