@@ -79,8 +79,8 @@ function generateContractSubset(subset: Subset): GeneratedContract[] {
   } else {
     const getParents = (c: GeneratedContract) => c.contract.parents.map(p => p.contract.path);
     return [
-      //...findCover(contracts.filter(c => 'upgradeable' in c.options ? !!c.options.upgradeable : false), getParents),
-      //...findCover(contracts.filter(c => 'upgradeable' in c.options ? !c.options.upgradeable : true), getParents),
+      ...findCover(contracts.filter(c => !!('upgradeable' in c.options ? c.options.upgradeable : false)), getParents),
+      ...findCover(contracts.filter(c => !('upgradeable' in c.options ? c.options.upgradeable : false)), getParents),
     ];
   }
 }

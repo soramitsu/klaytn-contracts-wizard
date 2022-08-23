@@ -52,15 +52,15 @@ export function requireAccessControl(c: ContractBuilder, fn: BaseFunction, acces
 }
 
 function getParents(klaytn: boolean = false) {
-  const operator = klaytn ? 'klaytn' : 'openzeppelin'
+  const prefix = klaytn ? '@klaytn/contracts/contracts' : '@openzeppelin/contracts'
   return {
     Ownable: {
       name: 'Ownable',
-      path: `@${operator}/contracts/access/Ownable.sol`,
+      path: `${prefix}/access/Ownable.sol`,
     },
     AccessControl: {
       name: 'AccessControl',
-      path: `@${operator}/contracts/access/AccessControl.sol`,
+      path: `${prefix}/access/AccessControl.sol`,
     },
   }
 }

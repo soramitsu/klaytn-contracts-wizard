@@ -30,7 +30,7 @@
 
     const dispatch = createEventDispatcher();
 
-    export let tab: Kind = 'ERC20';
+    export let tab: Kind = 'KIP7';
     $: {
       tab = sanitizeKind(tab);
       dispatch('tab-change', tab);
@@ -74,7 +74,7 @@
       e.preventDefault();
       if ((e.target as Element)?.classList.contains('disabled')) return;
       const versionedCode = printContractVersioned(contract);
-      window.open(remixURL(versionedCode, !!opts?.upgradeable).toString(), '_blank');
+      window.open(remixURL(versionedCode, !!((opts && 'upgradeable' in opts) ? opts.upgradeable : false)).toString(), '_blank');
       if (opts) {
         await postConfig(opts, 'remix', language);
       }
@@ -134,7 +134,7 @@
 
       <Tooltip
         let:trigger
-        disabled={!(opts?.upgradeable === "transparent")}
+        disabled={!((opts && 'upgradeable' in opts) ? opts?.upgradeable === "transparent" : false)}
         theme="light-red border"
         hideOnClick={false}
         interactive
@@ -142,7 +142,7 @@
         <button
           use:trigger
           class="action-button"
-          class:disabled={opts?.upgradeable === "transparent"}
+          class:disabled={(opts && 'upgradeable' in opts) ? opts?.upgradeable === "transparent" : false}
           on:click={remixHandler}
         >
           <RemixIcon />
@@ -187,6 +187,9 @@
 
   <div class="flex flex-row gap-4 grow">
     <div class="controls w-64 flex flex-col shrink-0 justify-between">
+      <div class:hidden={tab !== 'KIP7'}>
+        <KIP7Controls bind:opts={allOpts.KIP7} />
+      </div>
       <div class:hidden={tab !== 'ERC20'}>
         <ERC20Controls bind:opts={allOpts.ERC20} />
       </div>
@@ -195,9 +198,6 @@
       </div>
       <div class:hidden={tab !== 'ERC1155'}>
         <ERC1155Controls bind:opts={allOpts.ERC1155} />
-      </div>
-      <div class:hidden={tab !== 'KIP7'}>
-        <KIP7Controls bind:opts={allOpts.KIP7} />
       </div>
       <div class:hidden={tab !== 'Governor'}>
         <GovernorControls bind:opts={allOpts.Governor} errors={errors.Governor} />
