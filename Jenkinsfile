@@ -2,14 +2,11 @@
 
 def pipeline = new org.js.AppPipeline(
     steps: this,
-    buildDockerImage: 'build-tools/node:16-pnpm7',
+    test: false,
+    buildDockerImage: 'build-tools/node:14-alpine',
     dockerImageName: 'klaytn/klaytn-contracts-wizard',
     dockerRegistryCred: 'bot-klaytn-rw',
-    npmRegistries: [:],
-    packageManager: 'pnpm',
-    testCmds: ['pnpm format:check','pnpm lint','pnpm typecheck','pnpm test'],
-    buildCmds: ['pnpm build'],
-    sonarProjectName: 'klaytn-contracts-wizard',
-    sonarProjectKey: 'jp.co.soramitsu:klaytn-contracts-wizard',
+    packageManager: 'yarn',
+    buildCmds: ['yarn build'],
     gitUpdateSubmodule: true)
 pipeline.runPipeline()
