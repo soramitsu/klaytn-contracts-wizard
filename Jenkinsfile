@@ -7,6 +7,6 @@ def pipeline = new org.js.AppPipeline(
     dockerImageName: 'klaytn/klaytn-contracts-wizard',
     dockerRegistryCred: 'bot-klaytn-rw',
     packageManager: 'yarn',
-    buildCmds: ['yarn build'],
+    buildCmds: ['cd public/ui','yarn build'],
     gitUpdateSubmodule: true)
 pipeline.runPipeline()
