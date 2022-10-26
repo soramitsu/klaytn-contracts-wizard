@@ -332,6 +332,11 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@klaytn/contracts@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@klaytn/contracts/-/contracts-1.0.3.tgz#ad212804392ea9d23634c7c923539f3815a10462"
+  integrity sha512-ipgHp9pA6xi5dfr/4NG21yjunk35Dw7LHR/HPr/daaGgstzSluWi58XtY2ai09nBVohOPzVtdIew7xjgcGAaLg==
+
 "@metamask/eth-sig-util@^4.0.0":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@metamask/eth-sig-util/-/eth-sig-util-4.0.1.tgz#3ad61f6ea9ad73ba5b19db780d40d9aae5157088"
